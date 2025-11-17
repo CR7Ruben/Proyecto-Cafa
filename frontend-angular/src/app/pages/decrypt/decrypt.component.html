@@ -1,0 +1,9 @@
+<h2>Desencriptar</h2>
+
+<textarea placeholder="Texto cifrado" [(ngModel)]="ciphertext"></textarea>
+<input placeholder="Llave" [(ngModel)]="passwordKey">
+
+<button (click)="decrypt()">Desencriptar</button>
+
+<h3>Texto claro:</h3>
+<pre>{{ plaintext }}</pre>

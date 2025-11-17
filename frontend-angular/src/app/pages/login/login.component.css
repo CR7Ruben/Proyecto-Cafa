@@ -1,0 +1,10 @@
+.container {
+  margin: 50px auto;
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+input, button {
+  padding: 8px;
+}

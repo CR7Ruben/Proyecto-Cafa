@@ -1,0 +1,9 @@
+<h2>Encriptar</h2>
+
+<textarea placeholder="Texto claro" [(ngModel)]="plaintext"></textarea>
+<input placeholder="Llave" [(ngModel)]="passwordKey">
+
+<button (click)="encrypt()">Encriptar</button>
+
+<h3>Cifrado:</h3>
+<pre>{{ ciphertext }}</pre>
