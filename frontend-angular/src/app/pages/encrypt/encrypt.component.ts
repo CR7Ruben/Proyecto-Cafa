@@ -21,7 +21,9 @@ export class EncryptComponent {
   alertType: 'success' | 'danger' = 'success';
   showAlert = false;
 
-  constructor(private auth: AuthService, private router: Router) {}
+  constructor(private auth: AuthService, private router: Router) {
+    if (!this.auth.isLogged()) this.router.navigate(['/login']);
+  }
 
   private showBootstrapAlert(message: string, type: 'success' | 'danger' = 'success') {
     this.alertMessage = message;

@@ -13,18 +13,26 @@
 
     <!-- Texto cifrado -->
     <div class="mb-3">
-      <label for="ciphertext" class="form-label">Texto cifrado</label>
-      <textarea id="ciphertext" class="form-control" rows="4" placeholder="Ingresa el texto cifrado" [(ngModel)]="ciphertext"></textarea>
+      <strong>
+        <label for="ciphertext" class="form-label">Texto cifrado</label>
+      </strong>
+      <textarea id="ciphertext" class="form-control" rows="4" placeholder="Ingresa el texto cifrado"
+        [(ngModel)]="ciphertext"></textarea>
     </div>
 
     <!-- Llave -->
     <div class="mb-3">
-      <label for="passwordKey" class="form-label">Llave de desencriptación</label>
+      <strong>
+        <label for="passwordKey" class="form-label">Llave de desencriptación</label>
+      </strong>
       <div class="input-group">
-        <input id="passwordKey" type="text" class="form-control" placeholder="Ingresa tu llave" [(ngModel)]="passwordKey">
+        <input id="passwordKey" type="text" class="form-control" placeholder="Ingresa la llave de encriptación"
+          [(ngModel)]="passwordKey">
         <button class="btn btn-outline-secondary" type="button" (click)="generateKey()">Generar</button>
       </div>
-      <small class="text-muted">Llave actual: <span class="fw-bold">{{ passwordKey }}</span></small>
+      <strong>
+        <small class="text-muted">Llave actual: <span class="fw-bold">{{ passwordKey }}</span></small>
+      </strong>
     </div>
 
     <!-- Botón Desencriptar -->

@@ -13,18 +13,26 @@
 
     <!-- Texto claro -->
     <div class="mb-3">
-      <label for="plaintext" class="form-label">Texto claro</label>
-      <textarea id="plaintext" class="form-control" rows="4" placeholder="Ingresa el texto a encriptar" [(ngModel)]="plaintext"></textarea>
+      <strong>
+        <label for="plaintext" class="form-label">Texto claro</label>
+      </strong>
+      <textarea id="plaintext" class="form-control" rows="4" placeholder="Ingresa el texto a encriptar"
+        [(ngModel)]="plaintext"></textarea>
     </div>
 
     <!-- Llave -->
     <div class="mb-3">
-      <label for="passwordKey" class="form-label">Llave de encriptación</label>
+      <strong>
+        <label for="passwordKey" class="form-label">Llave de encriptación</label>
+      </strong>
       <div class="input-group">
-        <input id="passwordKey" type="text" class="form-control" placeholder="Ingresa tu llave" [(ngModel)]="passwordKey">
+        <input id="passwordKey" type="text" class="form-control" placeholder="Ingresa tu llave"
+          [(ngModel)]="passwordKey">
         <button class="btn btn-outline-secondary" type="button" (click)="generateKey()">Generar</button>
       </div>
-      <small class="text-muted">Llave actual: <span class="fw-bold">{{ passwordKey }}</span></small>
+      <strong>
+        <small class="text-muted">Llave actual: <span class="fw-bold">{{ passwordKey }}</span></small>
+      </strong>
     </div>
 
     <!-- Botón Encriptar -->
