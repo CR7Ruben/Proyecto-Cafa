@@ -13,7 +13,12 @@ export class DashboardComponent {
   constructor(
     public auth: AuthService,
     private router: Router
-  ) {}
+  ) {
+    // 🔹 Bloquear acceso si no hay sesión activa
+    if (!this.auth.isLogged()) {
+      this.router.navigate(['/login']);
+    }
+  }
 
   async logout() {
     await this.auth.logout();

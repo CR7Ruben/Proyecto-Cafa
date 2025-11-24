@@ -8,7 +8,7 @@ import { Router, RouterModule } from '@angular/router';
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
-  imports: [CommonModule, FormsModule, RouterModule] // 🔹 Agregado RouterModule
+  imports: [CommonModule, FormsModule, RouterModule]
 })
 export class LoginComponent {
 
@@ -17,7 +17,7 @@ export class LoginComponent {
 
   tabToken = crypto.randomUUID();
 
-  constructor(private router: Router) {}
+  constructor(private router: Router) { }
 
   login() {
     const payload = {
@@ -40,8 +40,10 @@ export class LoginComponent {
         console.log("Respuesta BACKEND:", data);
 
         if (data.ok === true) {
-          localStorage.setItem('isLogged', 'true');
-          localStorage.setItem('tabToken', this.tabToken);
+          // 🔹 Guardar sesión solo en la pestaña actual
+          sessionStorage.setItem('isLogged', 'true');
+          sessionStorage.setItem('tabToken', this.tabToken);
+
           this.router.navigate(['/dashboard']);
         } else {
           alert("Credenciales incorrectas");

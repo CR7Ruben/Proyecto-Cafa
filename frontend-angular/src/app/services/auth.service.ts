@@ -5,12 +5,12 @@ export class AuthService {
 
   FRONT_URL = 'http://localhost:4000';
 
-  // 🔹 Usar token guardado en localStorage o generar uno nuevo
+  // 🔹 Usar token guardado en sessionStorage o generar uno nuevo
   get tabToken() {
-    let token = localStorage.getItem('tabToken');
+    let token = sessionStorage.getItem('tabToken');
     if (!token) {
       token = crypto.randomUUID();
-      localStorage.setItem('tabToken', token);
+      sessionStorage.setItem('tabToken', token);
     }
     return token;
   }
@@ -48,8 +48,9 @@ export class AuthService {
       credentials: 'include',
       headers: { 'x-tab-token': this.tabToken }
     });
-    // 🔹 Limpiar token al cerrar sesión
-    localStorage.removeItem('tabToken');
+    // 🔹 Limpiar token y sesión al cerrar sesión
+    sessionStorage.removeItem('tabToken');
+    sessionStorage.removeItem('isLogged');
     return res.json();
   }
 
@@ -77,5 +78,10 @@ export class AuthService {
       body: JSON.stringify({ ciphertext, passwordKey })
     });
     return res.json();
+  }
+
+  // 🔹 Comprobar si hay sesión activa
+  isLogged(): boolean {
+    return sessionStorage.getItem('isLogged') === 'true';
   }
 }
