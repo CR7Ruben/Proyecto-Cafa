@@ -18,7 +18,7 @@ import { ApiInterceptor } from './interceptors/api.interceptor';
 
 @NgModule({
   declarations: [
-    AppComponent   // SOLO este va aquí
+    AppComponent   
   ],
   imports: [
     BrowserModule,

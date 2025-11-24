@@ -1,43 +1,81 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
-import { TabTokenService } from './tab-token.service';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class AuthService {
 
-  private api = 'http://localhost:4000/api';
+  FRONT_URL = 'http://localhost:4000';
 
-  private logged = false;
-
-  constructor(
-    private http: HttpClient,
-    private router: Router,
-    private tabToken: TabTokenService
-  ) {}
-
-  register(data: any) {
-    return this.http.post(`${this.api}/auth/register`, data);
+  // 🔹 Usar token guardado en localStorage o generar uno nuevo
+  get tabToken() {
+    let token = localStorage.getItem('tabToken');
+    if (!token) {
+      token = crypto.randomUUID();
+      localStorage.setItem('tabToken', token);
+    }
+    return token;
   }
 
-  login(data: any) {
-    return this.http.post(`${this.api}/auth/login`, data);
-  }
+  async login(username: string, password: string) {
+    const body = { username, password, tabToken: this.tabToken };
 
-  logout() {
-    return this.http.post(`${this.api}/auth/logout`, {}).subscribe(() => {
-      this.logged = false;
-      this.router.navigate(['/login']);
+    const res = await fetch(`${this.FRONT_URL}/api/auth/login`, {
+      method: 'POST',
+      headers: { 
+        'Content-Type': 'application/json',
+        'x-tab-token': this.tabToken
+      },
+      credentials: 'include',
+      body: JSON.stringify(body)
     });
+
+    return res.json();
   }
 
-  setLogged(status: boolean) {
-    this.logged = status;
+  async register(username: string, password: string) {
+    const res = await fetch(`${this.FRONT_URL}/api/auth/register`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ username, password })
+    });
+
+    return res.json();
   }
 
-  isLoggedIn() {
-    return this.logged;
+  async logout() {
+    const res = await fetch(`${this.FRONT_URL}/api/auth/logout`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'x-tab-token': this.tabToken }
+    });
+    // 🔹 Limpiar token al cerrar sesión
+    localStorage.removeItem('tabToken');
+    return res.json();
+  }
+
+  async encrypt(plaintext: string, passwordKey: string) {
+    const res = await fetch(`${this.FRONT_URL}/api/protected/encrypt`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        "Content-Type": "application/json",
+        "x-tab-token": this.tabToken
+      },
+      body: JSON.stringify({ plaintext, passwordKey })
+    });
+    return res.json();
+  }
+
+  async decrypt(ciphertext: string, passwordKey: string) {
+    const res = await fetch(`${this.FRONT_URL}/api/protected/decrypt`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        "Content-Type": "application/json",
+        "x-tab-token": this.tabToken
+      },
+      body: JSON.stringify({ ciphertext, passwordKey })
+    });
+    return res.json();
   }
 }

@@ -1,7 +1,48 @@
-<h2>Dashboard</h2>
+<div class="container my-5">
+  <!-- Header -->
+  <div class="text-center mb-5">
+    <h1 class="display-4 fw-bold">Bienvenido al Dashboard</h1>
+    <p class="text-muted">Gestiona tus funciones de encriptación y seguridad</p>
+  </div>
 
-<nav>
-  <a routerLink="/encrypt">Encriptar</a> |
-  <a routerLink="/decrypt">Desencriptar</a> |
-  <a (click)="auth.logout()">Cerrar Sesión</a>
-</nav>
+  <!-- Panel de botones -->
+  <div class="row justify-content-center g-4">
+
+    <!-- Encriptar -->
+    <div class="col-md-4">
+      <div class="card shadow-sm h-100 text-center">
+        <div class="card-body d-flex flex-column align-items-center justify-content-center">
+          <i class="bi bi-shield-lock display-1 text-primary mb-3"></i>
+          <h5 class="card-title">Encriptar</h5>
+          <p class="card-text text-muted">Protege tus datos de forma segura</p>
+          <button class="btn btn-primary mt-3" (click)="goEncrypt()">Ir</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Desencriptar -->
+    <div class="col-md-4">
+      <div class="card shadow-sm h-100 text-center">
+        <div class="card-body d-flex flex-column align-items-center justify-content-center">
+          <i class="bi bi-unlock display-1 text-success mb-3"></i>
+          <h5 class="card-title">Desencriptar</h5>
+          <p class="card-text text-muted">Recupera tus datos de forma rápida</p>
+          <button class="btn btn-success mt-3" (click)="goDecrypt()">Ir</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cerrar sesión -->
+    <div class="col-md-4">
+      <div class="card shadow-sm h-100 text-center">
+        <div class="card-body d-flex flex-column align-items-center justify-content-center">
+          <i class="bi bi-box-arrow-right display-1 text-danger mb-3"></i>
+          <h5 class="card-title">Cerrar Sesión</h5>
+          <p class="card-text text-muted">Finaliza tu sesión segura</p>
+          <button class="btn btn-danger mt-3" (click)="logout()">Salir</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

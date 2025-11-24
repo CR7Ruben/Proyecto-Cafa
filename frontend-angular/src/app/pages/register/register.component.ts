@@ -1,21 +1,35 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   standalone: true,
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css'],
-  imports: [CommonModule, FormsModule]
+  imports: [CommonModule, FormsModule, RouterModule] // 🔹 Agregado RouterModule
 })
 export class RegisterComponent {
 
-  username: string = '';
-  password: string = '';
+  username = '';
+  password = '';
 
-  register() {
-    console.log('Registrando usuario:', this.username, this.password);
-    // Aquí llamas al AuthService.register()
+  constructor(
+    private auth: AuthService,
+    private router: Router
+  ) {}
+
+  async register() {
+    const resp = await this.auth.register(this.username, this.password);
+
+    if (resp.ok) {
+      alert("Registrado exitosamente");
+      this.router.navigate(['/login']);
+    } else {
+      alert(resp.error || "Error en registro");
+    }
   }
 }
