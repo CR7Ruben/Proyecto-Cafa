@@ -5,6 +5,11 @@
       <p class="text-muted">Crea tu cuenta para acceder al sistema</p>
     </div>
 
+    <!-- Alertas -->
+    <div *ngIf="showAlert" class="alert" [ngClass]="'alert-' + alertType" role="alert">
+      {{ alertMessage }}
+    </div>
+
     <!-- Inputs -->
     <div class="mb-3">
       <label for="username" class="form-label">Usuario</label>

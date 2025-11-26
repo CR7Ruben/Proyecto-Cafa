@@ -16,20 +16,32 @@ export class RegisterComponent {
 
   username = '';
   password = '';
+  showAlert: any;
+  alertType: any;
+  alertMessage: any;
 
   constructor(
     private auth: AuthService,
     private router: Router
-  ) {}
+  ) { }
 
   async register() {
     const resp = await this.auth.register(this.username, this.password);
 
     if (resp.ok) {
-      alert("Registrado exitosamente");
-      this.router.navigate(['/login']);
+      this.showAlert = true;
+      this.alertType = 'success';
+      this.alertMessage = '¡Registrado exitosamente! Redirigiendo...';
+
+      // esperar 1 segundo y redirigir
+      setTimeout(() => {
+        this.router.navigate(['/login']);
+      }, 1200);
+
     } else {
-      alert(resp.error || "Error en registro");
+      this.showAlert = true;
+      this.alertType = 'danger';
+      this.alertMessage = resp.error || "Error en el registro";
     }
   }
 }
