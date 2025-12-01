@@ -39,7 +39,7 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-    fetch('http://localhost:2407/api/auth/login', {
+    fetch('http://localhost:4000/api/auth/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

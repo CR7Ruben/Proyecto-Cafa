@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid'; // 🔹 instalar: npm install uuid
 @Injectable({ providedIn: 'root' })
 export class AuthService {
 
-  FRONT_URL = 'http://localhost:2407';
+  FRONT_URL = 'http://localhost:4000';
 
   // 🔹 Usar token guardado en sessionStorage o generar uno nuevo
   get tabToken() {
