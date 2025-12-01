@@ -11,8 +11,22 @@ app.use(helmet());
 app.use(express.json());
 app.use(cookieParser());
 
-const FRONT = process.env.FRONTEND_ORIGIN || 'http://localhost:4000';
-app.use(cors({ origin: FRONT, credentials: true }));
+// Configuración de CORS
+const allowedOrigins = ['http://localhost:4200'];
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) === -1) {
+      const msg = 'El origen no tiene permiso de CORS';
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'x-tab-token'] // 🔹 agregado
+}));
+
 
 // routes
 app.use('/api/auth', require('./routes/auth'));

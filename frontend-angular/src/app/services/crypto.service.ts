@@ -6,7 +6,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class CryptoService {
 
-  private api = 'http://localhost:4000/api/protected';
+  private api = 'http://localhost:4200/api/protected';
 
   constructor(private http: HttpClient) {}
 
