@@ -21,7 +21,7 @@ function parseJwtExpToMs(exp) {
       if (exp.endsWith('m')) return parseInt(exp) * 60 * 1000;
       if (exp.endsWith('s')) return parseInt(exp) * 1000;
     }
-  } catch (e) {}
+  } catch (e) { }
   return 2 * 3600 * 1000; // default 2h
 }
 
@@ -49,13 +49,17 @@ router.post('/register', async (req, res) => {
 });
 
 /* ===========================
-   LOGIN
+   LOGIN (CORREGIDO)
 =========================== */
 router.post('/login', async (req, res) => {
   try {
     console.log("BODY RECIBIDO:", req.body);
 
-    const { username, password, tabToken } = req.body;
+    // ⬅️ CORRECCIÓN IMPORTANTE
+    const { username, password } = req.body;
+
+    // ⬅️ Ahora sí funciona con body + header
+    let tabToken = req.body.tabToken || req.get('x-tab-token');
 
     if (!username || !password || !tabToken)
       return res.status(400).json({ error: 'Missing fields (include tabToken)' });

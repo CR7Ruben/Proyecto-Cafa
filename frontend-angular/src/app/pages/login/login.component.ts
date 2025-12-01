@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
@@ -10,14 +10,26 @@ import { Router, RouterModule } from '@angular/router';
   styleUrls: ['./login.component.css'],
   imports: [CommonModule, FormsModule, RouterModule]
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
 
   username = '';
   password = '';
 
-  tabToken = crypto.randomUUID();
+  tabToken!: string;
 
   constructor(private router: Router) { }
+
+  ngOnInit() {
+    // ⬅️ Mantener un tabToken por pestaña
+    const saved = sessionStorage.getItem('tabToken');
+
+    if (saved) {
+      this.tabToken = saved;
+    } else {
+      this.tabToken = crypto.randomUUID();
+      sessionStorage.setItem('tabToken', this.tabToken);
+    }
+  }
 
   login() {
     const payload = {
@@ -40,7 +52,7 @@ export class LoginComponent {
         console.log("Respuesta BACKEND:", data);
 
         if (data.ok === true) {
-          // 🔹 Guardar sesión solo en la pestaña actual
+
           sessionStorage.setItem('isLogged', 'true');
           sessionStorage.setItem('tabToken', this.tabToken);
 
