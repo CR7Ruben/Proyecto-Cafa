@@ -6,15 +6,21 @@ import { CanActivate, Router } from '@angular/router';
 })
 export class AuthGuard implements CanActivate {
 
-  constructor(private router: Router) {}
+  constructor(private router: Router) { }
 
   canActivate(): boolean {
-    const token = localStorage.getItem('isLogged');
+    console.log('🛡️AuthGuard ejecutándose...');
 
-    if (token === 'true') {
+    // Cambiar de localStorage a sessionStorage
+    const isLogged = sessionStorage.getItem('isLogged');
+    console.log('🛡️sessionStorage isLogged: ', isLogged);
+
+    if (isLogged === 'true') {
+      console.log('✅AuthGuard: Acceso permitido');
       return true;
     }
 
+    console.log('❌AuthGuard: Acceso denegado, redirigiendo a login');
     this.router.navigate(['/login']);
     return false;
   }

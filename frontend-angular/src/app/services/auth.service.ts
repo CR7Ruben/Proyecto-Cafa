@@ -3,7 +3,6 @@ import { v4 as uuidv4 } from 'uuid';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-
   BACKEND_URL = 'http://localhost:4000/api';
 
   // Siempre obtener o crear tabToken
@@ -18,26 +17,24 @@ export class AuthService {
 
   // 🔹 LOGIN
   async login(username: string, password: string) {
-  try {
-    const res = await fetch(`${this.BACKEND_URL}/auth/login`, {
-      method: 'POST',
-      headers: { 
-        'Content-Type': 'application/json',
-        'x-tab-token': this.tabToken
-      },
-      credentials: 'include',
-      body: JSON.stringify({ username, password, tabToken: this.tabToken }) // ✅ incluir tabToken
-    });
-
-    const data = await res.json();
-    console.log('🔥 Login response:', data);
-    return data;
-
-  } catch (err) {
-    console.error('❌ AuthService login error:', err);
-    return { ok: false, error: 'Error de conexión' };
+    try {
+      const res = await fetch(`${this.BACKEND_URL}/auth/login`, {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+          'x-tab-token': this.tabToken
+        },
+        credentials: 'include',
+        body: JSON.stringify({ username, password, tabToken: this.tabToken })
+      });
+      const data = await res.json();
+      console.log('🔥 Login response:', data);
+      return data;
+    } catch (err) {
+      console.error('❌ AuthService login error:', err);
+      return { ok: false, error: 'Error de conexión' };
+    }
   }
-}
 
   // 🔹 REGISTER
   async register(username: string, password: string) {
