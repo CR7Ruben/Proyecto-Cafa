@@ -1,8 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core'; 
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { AuthService } from '../../services/auth.service';
 
 @Component({
   standalone: true,
@@ -17,19 +16,15 @@ export class LoginComponent implements OnInit {
   password = '';
   tabToken!: string;
 
-  showAlert = false;
-  alertType: 'success' | 'danger' = 'danger';
-  alertMessage = '';
-  passwordVisible = false;
-  loading = false;
+  showAlert: any;
+  alertType: any;
+  alertMessage: any;
 
-  constructor(
-    private router: Router,
-    private authService: AuthService
-  ) { }
+  passwordVisible = false;
+
+  constructor(private router: Router) { }
 
   ngOnInit() {
-    // Recuperar o generar tabToken
     const saved = sessionStorage.getItem('tabToken');
     if (saved) {
       this.tabToken = saved;
@@ -39,40 +34,49 @@ export class LoginComponent implements OnInit {
     }
   }
 
+  login() {
+    fetch('http://localhost:4000/api/auth/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      credentials: 'include',
+      body: JSON.stringify({
+        username: this.username,
+        password: this.password,
+        tabToken: this.tabToken
+      })
+    })
+    .then(res => res.json())
+    .then(data => {
+      console.log("Respuesta BACKEND:", data);
+
+      if (data.ok) {
+        sessionStorage.setItem('isLogged', 'true');
+        this.showAlert = true;
+        this.alertType = 'success';
+        this.alertMessage = '¡Inicio de sesión exitoso! Entrando...';
+
+        setTimeout(() => {
+          this.router.navigate(['/dashboard']);
+        }, 1200);
+
+      } else {
+        this.showAlert = true;
+        this.alertType = 'danger';
+        this.alertMessage = (data.error === 'Invalid creds') ? 'Usuario o contraseña incorrectos' : data.error;
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      this.showAlert = true;
+      this.alertType = 'danger';
+      this.alertMessage = 'Error al conectar con el servidor';
+    });
+  }
+
   togglePasswordVisibility() {
     this.passwordVisible = !this.passwordVisible;
   }
 
-  async login() {
-    if (!this.username || !this.password) {
-      this.showAlert = true;
-      this.alertType = 'danger';
-      this.alertMessage = 'Por favor, ingresa usuario y contraseña';
-      return;
-    }
-
-    this.loading = true;
-    this.showAlert = false;
-
-    try {
-      const response = await this.authService.login(this.username, this.password);
-
-      if (response.ok) {  // ⚠️ 'ok' en lugar de 'success'
-        sessionStorage.setItem('isLogged', 'true');
-        this.router.navigate(['/dashboard']); // o '/inicio' según tu ruta
-      } else {
-        this.showAlert = true;
-        this.alertType = 'danger';
-        this.alertMessage = response.error || 'Error al iniciar sesión';
-      }
-
-    } catch (err) {
-      console.error('Error de conexión:', err);
-      this.showAlert = true;
-      this.alertType = 'danger';
-      this.alertMessage = 'Error de conexión con el servidor';
-    } finally {
-      this.loading = false;
-    }
-  }
 }

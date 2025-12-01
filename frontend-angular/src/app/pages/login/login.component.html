@@ -1,5 +1,6 @@
 <div class="container d-flex justify-content-center align-items-center min-vh-100">
   <div class="card shadow-lg p-4 p-md-5" style="max-width: 400px; width: 100%;">
+
     <div class="text-center mb-4">
       <h2 class="fw-bold">Iniciar Sesión</h2>
       <p class="text-muted">Ingresa tus credenciales para continuar</p>
@@ -10,17 +11,27 @@
       {{ alertMessage }}
     </div>
 
-    <!-- Inputs -->
+    <!-- Usuario -->
     <div class="mb-3">
       <label for="username" class="form-label">Usuario</label>
       <input id="username" type="text" class="form-control" placeholder="Ej. Pepitopicapiedra" [(ngModel)]="username">
     </div>
 
+    <!-- Contraseña con ojo -->
     <div class="mb-3 password-container">
       <label for="password" class="form-label">Contraseña</label>
-      <input id="password" [type]="passwordVisible ? 'text' : 'password'" class="form-control"
-        placeholder="Ej. Pepito123" [(ngModel)]="password">
-      <i class="bi" [ngClass]="passwordVisible ? 'bi-eye-slash' : 'bi-eye'" (click)="togglePasswordVisibility()"></i>
+      <input 
+        id="password"
+        [type]="passwordVisible ? 'text' : 'password'"
+        class="form-control"
+        placeholder="Ej. Pepito123"
+        [(ngModel)]="password"
+      >
+      <i 
+        class="bi" 
+        [ngClass]="passwordVisible ? 'bi-eye-slash' : 'bi-eye'"
+        (click)="togglePasswordVisibility()"
+      ></i>
     </div>
 
     <!-- Botón -->
