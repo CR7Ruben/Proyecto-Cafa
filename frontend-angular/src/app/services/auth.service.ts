@@ -1,15 +1,16 @@
 import { Injectable } from '@angular/core';
+import { v4 as uuidv4 } from 'uuid'; // 🔹 instalar: npm install uuid
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
 
-  FRONT_URL = 'http://localhost:4000';
+  FRONT_URL = 'http://localhost:2407';
 
   // 🔹 Usar token guardado en sessionStorage o generar uno nuevo
   get tabToken() {
     let token = sessionStorage.getItem('tabToken');
     if (!token) {
-      token = crypto.randomUUID();
+      token = uuidv4(); // 🔹 uuidv4 funciona en cualquier navegador
       sessionStorage.setItem('tabToken', token);
     }
     return token;
@@ -48,7 +49,7 @@ export class AuthService {
       credentials: 'include',
       headers: { 'x-tab-token': this.tabToken }
     });
-    // 🔹 Limpiar token y sesión al cerrar sesión
+
     sessionStorage.removeItem('tabToken');
     sessionStorage.removeItem('isLogged');
     return res.json();
@@ -80,7 +81,6 @@ export class AuthService {
     return res.json();
   }
 
-  // 🔹 Comprobar si hay sesión activa
   isLogged(): boolean {
     return sessionStorage.getItem('isLogged') === 'true';
   }

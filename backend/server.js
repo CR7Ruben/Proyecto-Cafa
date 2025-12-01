@@ -11,7 +11,7 @@ app.use(helmet());
 app.use(express.json());
 app.use(cookieParser());
 
-const FRONT = process.env.FRONTEND_ORIGIN || 'http://localhost:4200';
+const FRONT = process.env.FRONTEND_ORIGIN || 'http://localhost:2407';
 app.use(cors({ origin: FRONT, credentials: true }));
 
 // routes
@@ -19,7 +19,7 @@ app.use('/api/auth', require('./routes/auth'));
 app.use('/api/protected', require('./routes/protected'));
 
 // start
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 2407;
 
 (async () => {
   try {

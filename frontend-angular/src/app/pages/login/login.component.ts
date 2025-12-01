@@ -16,7 +16,16 @@ export class LoginComponent implements OnInit {
   password = '';
   tabToken!: string;
 
-  constructor(private router: Router) {}
+  showAlert: any;
+  alertType: any;
+  alertMessage: any;
+  passwordVisible = false;
+
+  constructor(private router: Router) { }
+
+  togglePasswordVisibility() {
+    this.passwordVisible = !this.passwordVisible;
+  }
 
   ngOnInit() {
     const saved = sessionStorage.getItem('tabToken');
@@ -30,7 +39,7 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-    fetch('http://localhost:4000/api/auth/login', {
+    fetch('http://localhost:2407/api/auth/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -48,11 +57,26 @@ export class LoginComponent implements OnInit {
 
         if (data.ok) {
           sessionStorage.setItem('isLogged', 'true');
-          this.router.navigate(['/dashboard']);
+          this.showAlert = true;
+          this.alertType = 'success';
+          this.alertMessage = '¡Inicio de sesión exitoso!';
+
+          setTimeout(() => {
+            this.router.navigate(['/dashboard']);
+          }, 1200);
+
         } else {
-          alert(data.error || 'Credenciales incorrectas');
+          this.showAlert = true;
+          this.alertType = 'danger';
+          this.alertMessage = (data.error === 'Invalid creds') ? 'El usuario no existe' : data.error;
         }
       })
-      .catch(err => console.error(err));
+
+      .catch(err => {
+        console.error(err);
+        this.showAlert = true;
+        this.alertType = 'danger';
+        this.alertMessage = 'Error al conectar con el servidor';
+      });
   }
 }

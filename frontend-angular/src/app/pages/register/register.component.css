@@ -29,3 +29,21 @@ h2 {
 .btn-success:hover {
   transform: scale(1.05);
 }
+
+.password-container {
+  position: relative;
+}
+
+.password-container input {
+  padding-right: 2.5rem; /* espacio para el icono */
+}
+
+.password-container i {
+  position: absolute;
+  top: 73%;
+  right: 0.75rem; /* separacion del borde */
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #495057;
+  font-size: 1.1rem;
+}
