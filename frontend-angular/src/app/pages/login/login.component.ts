@@ -14,13 +14,11 @@ export class LoginComponent implements OnInit {
 
   username = '';
   password = '';
-
   tabToken!: string;
 
-  constructor(private router: Router) { }
+  constructor(private router: Router) {}
 
   ngOnInit() {
-    // ⬅️ Mantener un tabToken por pestaña
     const saved = sessionStorage.getItem('tabToken');
 
     if (saved) {
@@ -32,33 +30,27 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-    const payload = {
-      username: this.username,
-      password: this.password,
-      tabToken: this.tabToken
-    };
-
     fetch('http://localhost:4000/api/auth/login', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
+        'Content-Type': 'application/json'
       },
       credentials: 'include',
-      body: JSON.stringify(payload)
+      body: JSON.stringify({
+        username: this.username,
+        password: this.password,
+        tabToken: this.tabToken
+      })
     })
-      .then(async res => {
-        const data = await res.json();
+      .then(res => res.json())
+      .then(data => {
         console.log("Respuesta BACKEND:", data);
 
-        if (data.ok === true) {
-
+        if (data.ok) {
           sessionStorage.setItem('isLogged', 'true');
-          sessionStorage.setItem('tabToken', this.tabToken);
-
           this.router.navigate(['/dashboard']);
         } else {
-          alert("Credenciales incorrectas");
+          alert(data.error || 'Credenciales incorrectas');
         }
       })
       .catch(err => console.error(err));

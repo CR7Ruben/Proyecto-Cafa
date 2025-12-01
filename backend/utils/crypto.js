@@ -1,31 +1,33 @@
 ﻿const crypto = require('crypto');
 
 function deriveKey(password, salt) {
-  return crypto.pbkdf2Sync(Buffer.from(password, 'utf8'), salt, 150000, 32, 'sha256');
+  return crypto.pbkdf2Sync(password, salt, 150000, 32, 'sha256');
 }
 
 function encryptAES(plaintext, password) {
   const salt = crypto.randomBytes(16);
-  const key = deriveKey(password, salt);
+  const key = deriveKey(Buffer.from(password), salt);
   const iv = crypto.randomBytes(12);
+
   const cipher = crypto.createCipheriv('aes-256-gcm', key, iv);
-  const ciphertext = Buffer.concat([cipher.update(Buffer.from(plaintext, 'utf8')), cipher.final()]);
+  const encrypted = Buffer.concat([cipher.update(plaintext, 'utf8'), cipher.final()]);
   const tag = cipher.getAuthTag();
-  return Buffer.concat([salt, iv, tag, ciphertext]).toString('base64');
+
+  return Buffer.concat([salt, iv, tag, encrypted]).toString('base64');
 }
 
-function decryptAES(packageB64, password) {
-  const pkg = Buffer.from(packageB64, 'base64');
-  if (pkg.length < 44) throw new Error('Invalid package');
-  const salt = pkg.slice(0,16);
-  const iv = pkg.slice(16,28);
-  const tag = pkg.slice(28,44);
-  const ciphertext = pkg.slice(44);
-  const key = deriveKey(password, salt);
+function decryptAES(b64, password) {
+  const raw = Buffer.from(b64, 'base64');
+  const salt = raw.slice(0, 16);
+  const iv = raw.slice(16, 28);
+  const tag = raw.slice(28, 44);
+  const ciphertext = raw.slice(44);
+
+  const key = deriveKey(Buffer.from(password), salt);
   const decipher = crypto.createDecipheriv('aes-256-gcm', key, iv);
   decipher.setAuthTag(tag);
-  const plain = Buffer.concat([decipher.update(ciphertext), decipher.final()]);
-  return plain.toString('utf8');
+
+  return decipher.update(ciphertext, 'binary', 'utf8') + decipher.final('utf8');
 }
 
 module.exports = { encryptAES, decryptAES };
