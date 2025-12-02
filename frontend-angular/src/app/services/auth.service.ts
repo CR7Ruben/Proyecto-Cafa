@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 @Injectable({ providedIn: 'root' })
 export class AuthService {
 
-  BACKEND_URL = 'http://localhost:4000/api';
+  BACKEND_URL = 'http://177.227.43.252:4000/api';
 
   // Siempre obtener o crear tabToken
   get tabToken(): string {

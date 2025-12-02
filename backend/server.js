@@ -12,7 +12,12 @@ app.use(express.json());
 app.use(cookieParser());
 
 // Configuración de CORS
-const allowedOrigins = ['http://localhost:4200'];
+const allowedOrigins = [
+  'https://dixie-subhemispheric-phantasmagorianly.ngrok-free.dev',
+  'http://177.227.43.252:4000',
+  'http://177.227.43.252'
+];
+
 app.use(cors({
   origin: function (origin, callback) {
     if (!origin) return callback(null, true);
