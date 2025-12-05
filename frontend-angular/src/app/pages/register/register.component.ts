@@ -30,7 +30,27 @@ export class RegisterComponent {
     this.passwordVisible = !this.passwordVisible;
   }
 
+  validarCredenciales(): string | null {
+    const passRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&._-])[A-Za-z\d@$!%*?&._-]{8,}$/;
+
+    if (!passRegex.test(this.password)) {
+      return "La contraseña debe tener mínimo 8 caracteres, mayúscula, minúscula, número y un carácter especial.";
+    }
+
+    return null;
+  }
+
   async register() {
+    const error = this.validarCredenciales();
+
+    if (error) {
+      this.showAlert = true;
+      this.alertType = 'danger';
+      this.alertMessage = error;
+      return;
+    }
+
     const resp = await this.auth.register(this.username, this.password);
 
     if (resp.ok) {
@@ -48,6 +68,7 @@ export class RegisterComponent {
       this.alertMessage = this.traducirError(resp.error);
     }
   }
+
 
   traducirError(error: string) {
     switch (error) {

@@ -30,7 +30,29 @@ export class LoginComponent {
     this.passwordVisible = !this.passwordVisible;
   }
 
+  validarCredenciales(): string | null {
+
+    const passRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&._-])[A-Za-z\d@$!%*?&._-]{8,}$/;
+
+    if (!passRegex.test(this.password)) {
+      return "La contraseña debe tener mínimo 8 caracteres, mayúscula, minúscula, número y un carácter especial.";
+    }
+
+    return null;
+  }
+
+
   async login() {
+    const error = this.validarCredenciales();
+
+    if (error) {
+      this.showAlert = true;
+      this.alertType = 'danger';
+      this.alertMessage = error;
+      return;
+    }
+
     const resp = await this.auth.login(this.username, this.password);
 
     if (resp && resp.ok) {
@@ -49,5 +71,6 @@ export class LoginComponent {
       this.alertMessage = (resp && resp.error) ? resp.error : 'Credenciales inválidas';
     }
   }
+
 
 }
